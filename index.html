@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>JavaScript</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            weather forecast
+        </header>
+        <main class="main">
+            <div class="container">
+                <div class="weather__forest">
+
+                    <form class="forest__form">
+                        <label for="input_id"></label><input placeholder="Please enter the city in English only" id="input_id" type="text" class="forest__input">
+                        <input value="" type="submit" class="button__search"/>
+                    </form>
+
+                    <div class="forest__body">
+
+                        <div class="forest__body-weather">
+
+                            <div class="tabs">
+                                <div class="tabs-block__body">
+                                    <div class="tabs-block__block tabs-block active">
+                                        <div class="weather__temperature">
+                                            <span class="city__temperature">14</span>°
+                                        </div>
+                                        <div class="weather__img">
+                                            <img src="cloud.svg" alt="">
+                                        </div>
+                                        <div class="weather__city _city">
+                                            Aktobe
+                                        </div>
+                                        <div class="weather__favorites">
+
+                                        </div>
+                                    </div>
+                                    <div class="tabs-block__block tabs-block">
+                                        <div class="city__body">
+                                            <div class="city _city">
+                                                Aktobe
+                                            </div>
+                                            <ul class="city__info">
+                                                <li class="temperature">
+                                                    Temperature: <span class="city__temperature">14</span>°
+                                                </li>
+                                                <li class="feels">
+                                                    Feels like: <span class="feels__like">10</span>°
+                                                </li>
+                                                <li class="weather">
+                                                    Weather: <span>Clouds</span>
+                                                </li>
+                                                <li class="sunrise">
+                                                    Sunrise: <span>03:21</span>
+                                                </li>
+                                                <li class="sunset">
+                                                    Sunset: <span>18:54</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tabs-block__block tabs-block">
+                                        <div class="info__city-cloud">
+                                            <div class="cloud-city _city">
+                                                Aktobe
+                                            </div>
+                                            <div class="cloud-city-info">
+                                                <div class="cloud-city__item">
+                                                    <div class="city-info__date">17 May</div>
+                                                    <div class="city-info__time">12:00</div>
+                                                    <div class="city-info__body">
+                                                        <div class="city-info__temperature">
+                                                            Temperature: <span>14</span>°
+                                                        </div>
+                                                        <div class="city-info-feels">
+                                                            Feels like: <span>10</span>°
+                                                        </div>
+                                                    </div>
+                                                    <div class="city-info__cloud">
+                                                        <div class="city-info__cloud-name">
+                                                            Rain
+                                                        </div>
+                                                        <div class="city-info__cloud-img">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="cloud-city__item">
+                                                    <div class="city-info__date">17 May</div>
+                                                    <div class="city-info__time">15:00</div>
+                                                    <div class="city-info__body">
+                                                        <div class="city-info__temperature">
+                                                            Temperature: <span>14</span>°
+                                                        </div>
+                                                        <div class="city-info-feels">
+                                                            Feels like: <span>10</span>°
+                                                        </div>
+                                                    </div>
+                                                    <div class="city-info__cloud">
+                                                        <div class="city-info__cloud-name">
+                                                            Rain
+                                                        </div>
+                                                        <div class="city-info__cloud-img">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="cloud-city__item">
+                                                    <div class="city-info__date">17 May</div>
+                                                    <div class="city-info__time">18:00</div>
+                                                    <div class="city-info__body">
+                                                        <div class="city-info__temperature">
+                                                            Temperature: <span>14</span>°
+                                                        </div>
+                                                        <div class="city-info-feels">
+                                                            Feels like: <span>10</span>°
+                                                        </div>
+                                                    </div>
+                                                    <div class="city-info__cloud">
+                                                        <div class="city-info__cloud-name">
+                                                            Rain
+                                                        </div>
+                                                        <div class="city-info__cloud-img">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <nav class="tabs-block__nav">
+                                    <div class="tabs-block__item tabs-item active">
+                                        Now
+                                    </div>
+                                    <div class="tabs-block__item tabs-item">
+                                        Details
+                                    </div>
+                                    <div class="tabs-block__item tabs-item">
+                                        Forecast
+                                    </div>
+                                </nav>
+                            </div>
+
+                        </div>
+
+                        <div class="forest__body-location">
+                            <div class="location__add">
+                                Added Locations:
+                            </div>
+                            <div class="location__locations">
+                                <ul class="location__locations-list">
+                                    <li>Amur</li>
+                                    <li>Samara</li>
+                                    <li>Bali</li>
+                                    <li>Dane</li>
+                                    <li>Kilo</li>
+                                    <li>Nur-Sultan</li>
+                                    <li>Moscow</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">Nefedov_it</footer>
+    </div>
+<script type="module" src="main.js"></script>
+<script type="module" src="view.js"></script>
+</body>
+</html>

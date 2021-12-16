@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+}
+ul, ol, li {
+  list-style: none;
+}
+img {
+  vertical-align: top;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+}
+.error {
+  border: 2px solid #ff0000;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #ff0000;
+}
+body {
+  font-size: 16px;
+  font-family: Roboto, sans-serif;
+  color: #000;
+}
+html, body {
+  height: 100%;
+}
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  background-color: darkslateblue;
+  color: #fff;
+  font-weight: bold;
+}
+.main {
+  flex: 1 1 auto;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+.forest__form {
+  border: 1px solid #000;
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  & .forest__input {
+    width: 90%;
+    height: 35px;
+    font-size: 18px;
+    line-height: 21px;
+    padding: 0 5px;
+    @media screen and (max-width: 620px) {
+      width: 80%;
+      &::placeholder {
+        font-size: 14px;
+      }
+    }
+  }
+  & .button__search{
+    background: url("search.svg") no-repeat;
+    display: block;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+  }
+}
+.weather__forest{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 600px;
+  margin: 0 auto;
+  @media screen and (max-width: 620px) {
+    width: 300px;
+  }
+}
+.forest__body{
+  display: flex;
+  @media screen and (max-width: 620px) {
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+}
+.forest__body-weather {
+  width: 300px;
+}
+.forest__body-location {
+  width: 300px;
+}
+.tabs-block {
+  display: none;
+  &.active {
+    display: block;
+  }
+}
+.tabs-block__nav {
+  display: flex;
+}
+.tabs-block__item {
+  flex: 0 0 98.5px;
+  border: 1px solid #000;
+  background-color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  & + .tabs-block__item {
+    border-left: 0;
+  }
+
+  &.active {
+    background-color: #000;
+    color: #fff;
+  }
+}
+.tabs-block__body {
+  position: relative;
+  height: 345px;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+
+.weather__temperature {
+  font-size: 70px;
+  line-height: 82px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.weather__img {
+  position: absolute;
+  left: calc(50% - 39px);
+  top: calc(50% - 29.5px);
+}
+.weather__city {
+  font-size: 24px;
+  line-height: 28px;
+  position: absolute;
+  left: 10px;
+  bottom: 20px;
+}
+.weather__favorites {
+  background: url("favorites.svg") no-repeat;
+  display: block;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
+  cursor: pointer;
+}
+.mb {
+  margin-bottom: 15px;
+}
+.city__body {
+  word-wrap: break-word;
+  font-size: 24px;
+  line-height: 28px;
+  padding: 25px 10px 0 15px;
+  & .city {
+    margin-bottom: 25px;
+  }
+  & .city__info {
+    height: 250px;
+    overflow-y: scroll;
+    & li:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}
+.info__city-cloud {
+  word-wrap: break-word;
+  font-size: 24px;
+  line-height: 28px;
+  padding: 25px 0 0 15px;
+  & .cloud-city {
+    margin-bottom: 10px;
+  }
+  & .cloud-city-info{
+    height: 282px;
+    overflow-y: scroll;
+    font-size: 18px;
+    line-height: 21px;
+    position: relative;
+    & .cloud-city__item {
+      position: relative;
+      width: 265px;
+      height: 120px;
+      border: 1px solid #000;
+      margin-bottom: 10px;
+      & .city-info__date {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+      }
+      & .city-info__time {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+      & .city-info__body {
+        position: absolute;
+        left: 10px;
+        bottom: 18px;
+      }
+      & .city-info__cloud {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        & .city-info__cloud-img {
+          background: url("rain.svg") no-repeat;
+          display: block;
+          height: 31px;
+          width: 31px;
+        }
+      }
+    }
+  }
+}
+.forest__body-location {
+  font-size: 24px;
+  line-height: 28px;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+  @media screen and (max-width: 620px) {
+    border-left: 1px solid #000;
+  }
+  .location__add{
+    padding: 25px 15px 10px 15px;
+    border-bottom: 1px solid #000;
+  }
+  .location__locations {
+    height: 340px;
+    overflow-y: scroll;
+    padding: 35px 10px 10px 40px;
+    & .location__locations-list{
+      & li:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  text-transform: uppercase;
+  background-color: darkslateblue;
+  color: #fff;
+  font-weight: bold;
+}
