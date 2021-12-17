@@ -1,10 +1,14 @@
 export const UI_ELEMENTS = {
-    locations: document.querySelector('.location__locations-list'),
-    cities: document.querySelectorAll('._city'),
-    temperature: document.querySelectorAll('.city__temperature'),
-    feels_like: document.querySelectorAll('.feels__like'),
-    button: document.querySelector('.button__search'),
-    form: document.querySelector('.forest__form'),
+    LOCATIONS: document.querySelector('.location__locations-list'),
+    CITIES: document.querySelectorAll('._city'),
+    TEMPERATURE: document.querySelectorAll('.city__temperature'),
+    FEELS_LIKE: document.querySelectorAll('.feels__like'),
+    BUTTON_SEARCH_CITY: document.querySelector('.button__search'),
+    FORM_WEATHER: document.querySelector('.forest__form'),
+    CITY_WEATHER: document.querySelector('.city__weather'),
+    CITY_SUNRISE: document.querySelector('.city__sunrise'),
+    CITY_SUNSET: document.querySelector('.city__sunset'),
+    WEATHER_IMG: document.querySelector('.city__weather-img')
 }
 
 export const URL = {

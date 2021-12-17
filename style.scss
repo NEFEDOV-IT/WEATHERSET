@@ -158,8 +158,12 @@ header {
 }
 .weather__img {
   position: absolute;
-  left: calc(50% - 39px);
-  top: calc(50% - 29.5px);
+  left: calc(50% - 50px);
+  top: calc(50% - 50px);
+  & img {
+    width: 100px;
+    height: 100px;
+  }
 }
 .weather__city {
   font-size: 24px;
