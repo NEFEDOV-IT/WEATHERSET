@@ -45,9 +45,8 @@ function weatherResult(cityName) {
             UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(SUNRISE)
             UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(SUNSET)
 
-            UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', (item) => {
+            UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', () => {
                 const LOCATIONS_LI = document.querySelectorAll('.list-li')
-                const WEATHER_FAVORITES = document.querySelector('.weather__favorites')
 
                 for (let i = 0; i < LOCATIONS_LI.length; i++) {
                     const element = LOCATIONS_LI[i]
@@ -57,13 +56,14 @@ function weatherResult(cityName) {
 
                 const CREATE_LI_CITY = document.createElement('li')
                 const BUTTON_CLOSE = document.createElement('span')
-                WEATHER_FAVORITES.innerHTML = '&#9829;'
+                UI_ELEMENTS.WEATHER_FAVORITES.innerHTML = '&#9829;'
                 CREATE_LI_CITY.classList.add('mb', 'list-li')
                 CREATE_LI_CITY.textContent = city
                 BUTTON_CLOSE.classList.add('li-close')
                 BUTTON_CLOSE.innerHTML = '&#65794'
                 BUTTON_CLOSE.addEventListener('click', deleteCity)
                 CREATE_LI_CITY.append(BUTTON_CLOSE)
+
                 UI_ELEMENTS.LOCATIONS.prepend(CREATE_LI_CITY)
                 CREATE_LI_CITY.addEventListener('click', () => weatherResult(city))
             })
