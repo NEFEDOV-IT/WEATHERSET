@@ -34,9 +34,9 @@ function weatherResult(cityName) {
     fetch(URL_CITY)
         .then(response => response.json())
         .then(function weatherCity(answer) {
-            UI_ELEMENTS.CITIES.forEach(item => {item.textContent = city})
             UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(answer.main.temp))
             UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(answer.main.feels_like))
+            UI_ELEMENTS.CITIES.forEach(item => item.textContent = city)
             answer.weather.forEach(item => {
                 UI_ELEMENTS.CITY_WEATHER.textContent = item.main
                 UI_ELEMENTS.WEATHER_IMG.src = 'img/' + item.icon + '.png'
@@ -47,16 +47,17 @@ function weatherResult(cityName) {
             UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(SUNSET)
 
             UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', (item) => {
-                const CREATE_LI_CITY = document.createElement('li')
-                const BUTTON_CLOSE = document.createElement('span')
                 const LOCATIONS_LI = document.querySelectorAll('.list-li')
                 const WEATHER_FAVORITES = document.querySelector('.weather__favorites')
 
-                LOCATIONS_LI.forEach(item => {
-                    const isCorrectCity = item.textContent.slice(0, -2) === city
-                    if(isCorrectCity) throw new Error('Error')
-                })
+                for (let i = 0; i < LOCATIONS_LI.length; i++) {
+                    const element = LOCATIONS_LI[i]
+                    const isCorrectCity = element.textContent.slice(0, -2) === city
+                    if (isCorrectCity) return
+                }
 
+                const CREATE_LI_CITY = document.createElement('li')
+                const BUTTON_CLOSE = document.createElement('span')
                 WEATHER_FAVORITES.innerHTML = '&#9829;'
                 CREATE_LI_CITY.classList.add('mb', 'list-li')
                 CREATE_LI_CITY.textContent = city

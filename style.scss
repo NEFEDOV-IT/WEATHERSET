@@ -158,11 +158,11 @@ header {
 }
 .weather__img {
   position: absolute;
-  left: calc(50% - 50px);
-  top: calc(50% - 50px);
+  left: calc(50% - 75px);
+  top: calc(50% - 75px);
   & img {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
   }
 }
 .weather__city {
