@@ -8,7 +8,9 @@ export const UI_ELEMENTS = {
     CITY_WEATHER: document.querySelector('.city__weather'),
     CITY_SUNRISE: document.querySelector('.city__sunrise'),
     CITY_SUNSET: document.querySelector('.city__sunset'),
-    WEATHER_IMG: document.querySelector('.city__weather-img')
+    WEATHER_IMG: document.querySelector('.city__weather-img'),
+    WEATHER_FAVORITES: document.querySelector('.weather__favorites'),
+    CITY_LI_CLOSE: document.querySelectorAll('.li-close'),
 }
 
 export const URL = {
