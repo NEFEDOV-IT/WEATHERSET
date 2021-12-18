@@ -11,6 +11,7 @@ export const UI_ELEMENTS = {
     WEATHER_IMG: document.querySelector('.city__weather-img'),
     WEATHER_FAVORITES: document.querySelector('.weather__favorites'),
     CITY_LI_CLOSE: document.querySelectorAll('.li-close'),
+    LOCATIONS_LI: document.querySelectorAll('.list-li'),
 }
 
 export const URL = {

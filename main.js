@@ -6,8 +6,7 @@ UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     weatherResult()
 })
 
-const LOCATIONS_LI = document.querySelectorAll('.list-li')
-LOCATIONS_LI.forEach(item => {
+UI_ELEMENTS.LOCATIONS_LI.forEach(item => {
     item.addEventListener('click', () => {
         const cityName = item.textContent.slice(0, -2)
         weatherResult(cityName)
