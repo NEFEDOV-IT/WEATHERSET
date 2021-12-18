@@ -17,7 +17,7 @@ function weatherResult(cityName) {
     const FOREST_INPUT = document.querySelector('.forest__input')
     let city = FOREST_INPUT.value || cityName
     const URL_CITY = `${URL.server}?q=${city}&appid=${URL.apiKey}`
-    const isEmptyCity = /^[a-zA-Z- ]+$/.test(city.trim())
+    const isEmptyCity = /^[а-яА-Яa-zA-Z- ]+$/.test(city.trim())
 
     try {
         FOREST_INPUT.classList.remove('error')
