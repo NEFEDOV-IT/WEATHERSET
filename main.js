@@ -1,5 +1,6 @@
 import {UI_ELEMENTS, URL} from './view.js'
-let cityName
+
+let currentCity = undefined
 
 UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     e.preventDefault()
@@ -23,25 +24,22 @@ function weatherResult() {
 
     fetch(URL_CITY)
         .then(response => response.json())
-        .then(answer => {
-            UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(answer.main.temp))
-            UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(answer.main.feels_like))
-            UI_ELEMENTS.CITIES.forEach(item => item.textContent = cityName = answer.name)
-            answer.weather.forEach(item => {
-                UI_ELEMENTS.CITY_WEATHER.textContent = item.main
-                UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + item.icon + '@4x' + '.png'
-            })
-            const SUNRISE = answer.sys.sunrise
-            const SUNSET = answer.sys.sunset
-            UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(SUNRISE)
-            UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(SUNSET)
-
-            UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', addFavourite)
-
-        })
+        .then(addInfoTabs)
         .catch(error => alert(error.message + '\nThe data is incomplete: City is entered incorrectly, check the correctness of the entry.'))
-
     UI_ELEMENTS.FORM_WEATHER.reset()
+}
+
+function addInfoTabs(answer) {
+    UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(answer.main.temp))
+    UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(answer.main.feels_like))
+    UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = answer.name)
+    answer.weather.forEach(item => {
+        UI_ELEMENTS.CITY_WEATHER.textContent = item.main
+        UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + item.icon + '@4x.png'
+    })
+    UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(answer.sys.sunrise)
+    UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(answer.sys.sunset)
+    UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', addFavourite)
 }
 
 function addFavourite() {
@@ -49,25 +47,21 @@ function addFavourite() {
 
     for (let i = 0; i < LOCATIONS_LI.length; i++) {
         const element = LOCATIONS_LI[i]
-        const isCorrectCity = element.textContent.slice(0, -2) === cityName
+        const isCorrectCity = element.textContent.slice(0, -2) === currentCity
         if (isCorrectCity) return
-    }
-
-    if (UI_ELEMENTS.WEATHER_FAVORITES.src === 'favorites-black.svg') {
-        UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites.svg'
     }
 
     const CREATE_LI_CITY = document.createElement('li')
     const BUTTON_CLOSE = document.createElement('span')
     UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
     CREATE_LI_CITY.classList.add('mb', 'list-li')
-    CREATE_LI_CITY.textContent = cityName
+    CREATE_LI_CITY.textContent = currentCity
     BUTTON_CLOSE.classList.add('li-close')
     BUTTON_CLOSE.innerHTML = '&#65794'
     BUTTON_CLOSE.addEventListener('click', deleteCity)
     CREATE_LI_CITY.append(BUTTON_CLOSE)
-
     UI_ELEMENTS.LOCATIONS.prepend(CREATE_LI_CITY)
+
     CREATE_LI_CITY.addEventListener('click', () => {
         UI_ELEMENTS.FOREST_INPUT.value = CREATE_LI_CITY.textContent.slice(0, -2)
         weatherResult()
