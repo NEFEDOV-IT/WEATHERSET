@@ -15,6 +15,7 @@ export const UI_ELEMENTS = {
 }
 
 export const URL = {
-    server: 'https://api.openweathermap.org/data/2.5/weather',
-    apiKey: 'f660a2fb1e4bad108d6160b7f58c555f&units=metric',
+    SERVER: 'https://api.openweathermap.org/data/2.5/weather',
+    APIKEY: 'f660a2fb1e4bad108d6160b7f58c555f&units=metric',
+    ICON_WEATHER: 'https://openweathermap.org/img/wn/',
 }

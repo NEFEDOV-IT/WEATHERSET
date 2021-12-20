@@ -2,13 +2,14 @@ import {UI_ELEMENTS, URL} from './view.js'
 
 UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     e.preventDefault()
-    UI_ELEMENTS.WEATHER_FAVORITES.innerHTML = '&#9825;'
+    UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites.svg'
     weatherResult()
 })
 
 UI_ELEMENTS.LOCATIONS_LI.forEach(item => {
     item.addEventListener('click', () => {
         const cityName = item.textContent.slice(0, -2)
+        UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
         weatherResult(cityName)
     })
 })
@@ -16,7 +17,7 @@ UI_ELEMENTS.LOCATIONS_LI.forEach(item => {
 function weatherResult(cityName) {
     const FOREST_INPUT = document.querySelector('.forest__input')
     let city = FOREST_INPUT.value || cityName
-    const URL_CITY = `${URL.server}?q=${city}&appid=${URL.apiKey}`
+    const URL_CITY = `${URL.SERVER}?q=${city}&appid=${URL.APIKEY}`
     const isEmptyCity = /^[а-яА-Яa-zA-Z- ]+$/.test(city.trim())
 
     try {
@@ -32,13 +33,13 @@ function weatherResult(cityName) {
 
     fetch(URL_CITY)
         .then(response => response.json())
-        .then(function weatherCity(answer) {
+        .then(answer => {
             UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(answer.main.temp))
             UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(answer.main.feels_like))
             UI_ELEMENTS.CITIES.forEach(item => item.textContent = city)
             answer.weather.forEach(item => {
                 UI_ELEMENTS.CITY_WEATHER.textContent = item.main
-                UI_ELEMENTS.WEATHER_IMG.src = 'img/' + item.icon + '.png'
+                UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + item.icon + '@4x' + '.png'
             })
             const SUNRISE = answer.sys.sunrise
             const SUNSET = answer.sys.sunset
@@ -54,9 +55,14 @@ function weatherResult(cityName) {
                     if (isCorrectCity) return
                 }
 
+                // console.log(UI_ELEMENTS.WEATHER_FAVORITES.innerHTML)
+                // if (UI_ELEMENTS.WEATHER_FAVORITES.innerHTML === '&#9829;') {
+                //     UI_ELEMENTS.WEATHER_FAVORITES.innerHTML = '&#9825;'
+                // }
+
                 const CREATE_LI_CITY = document.createElement('li')
                 const BUTTON_CLOSE = document.createElement('span')
-                UI_ELEMENTS.WEATHER_FAVORITES.innerHTML = '&#9829;'
+                UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
                 CREATE_LI_CITY.classList.add('mb', 'list-li')
                 CREATE_LI_CITY.textContent = city
                 BUTTON_CLOSE.classList.add('li-close')
