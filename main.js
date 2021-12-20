@@ -1,4 +1,5 @@
 import {UI_ELEMENTS, URL} from './view.js'
+let cityName
 
 UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     e.preventDefault()
@@ -6,37 +7,26 @@ UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     weatherResult()
 })
 
-UI_ELEMENTS.LOCATIONS_LI.forEach(item => {
-    item.addEventListener('click', () => {
-        const cityName = item.textContent.slice(0, -2)
-        UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
-        weatherResult(cityName)
-    })
-})
-
-function weatherResult(cityName) {
-    const FOREST_INPUT = document.querySelector('.forest__input')
-    let city = FOREST_INPUT.value || cityName
+function weatherResult() {
+    const city = UI_ELEMENTS.FOREST_INPUT.value
     const URL_CITY = `${URL.SERVER}?q=${city}&appid=${URL.APIKEY}`
     const isEmptyCity = /^[а-яА-Яa-zA-Z- ]+$/.test(city.trim())
 
     try {
-        FOREST_INPUT.classList.remove('error')
+        UI_ELEMENTS.FOREST_INPUT.classList.remove('error')
         if (!isEmptyCity) throw new SyntaxError("City is not entered or entered incorrectly, check the correctness of the entry.")
     } catch (error) {
         UI_ELEMENTS.FORM_WEATHER.reset()
-        FOREST_INPUT.classList.add('error')
+        UI_ELEMENTS.FOREST_INPUT.classList.add('error')
         return alert('The data is incomplete: ' + error.message)
     }
-
-    city = capitalLetter(city)
 
     fetch(URL_CITY)
         .then(response => response.json())
         .then(answer => {
             UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(answer.main.temp))
             UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(answer.main.feels_like))
-            UI_ELEMENTS.CITIES.forEach(item => item.textContent = city)
+            UI_ELEMENTS.CITIES.forEach(item => item.textContent = cityName = answer.name)
             answer.weather.forEach(item => {
                 UI_ELEMENTS.CITY_WEATHER.textContent = item.main
                 UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + item.icon + '@4x' + '.png'
@@ -46,33 +36,7 @@ function weatherResult(cityName) {
             UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(SUNRISE)
             UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(SUNSET)
 
-            UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', () => {
-                const LOCATIONS_LI = document.querySelectorAll('.list-li')
-
-                for (let i = 0; i < LOCATIONS_LI.length; i++) {
-                    const element = LOCATIONS_LI[i]
-                    const isCorrectCity = element.textContent.slice(0, -2) === city
-                    if (isCorrectCity) return
-                }
-
-                // console.log(UI_ELEMENTS.WEATHER_FAVORITES.innerHTML)
-                // if (UI_ELEMENTS.WEATHER_FAVORITES.innerHTML === '&#9829;') {
-                //     UI_ELEMENTS.WEATHER_FAVORITES.innerHTML = '&#9825;'
-                // }
-
-                const CREATE_LI_CITY = document.createElement('li')
-                const BUTTON_CLOSE = document.createElement('span')
-                UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
-                CREATE_LI_CITY.classList.add('mb', 'list-li')
-                CREATE_LI_CITY.textContent = city
-                BUTTON_CLOSE.classList.add('li-close')
-                BUTTON_CLOSE.innerHTML = '&#65794'
-                BUTTON_CLOSE.addEventListener('click', deleteCity)
-                CREATE_LI_CITY.append(BUTTON_CLOSE)
-
-                UI_ELEMENTS.LOCATIONS.prepend(CREATE_LI_CITY)
-                CREATE_LI_CITY.addEventListener('click', () => weatherResult(city))
-            })
+            UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', addFavourite)
 
         })
         .catch(error => alert(error.message + '\nThe data is incomplete: City is entered incorrectly, check the correctness of the entry.'))
@@ -80,16 +44,38 @@ function weatherResult(cityName) {
     UI_ELEMENTS.FORM_WEATHER.reset()
 }
 
-UI_ELEMENTS.CITY_LI_CLOSE.forEach(item => item.addEventListener('click', deleteCity))
+function addFavourite() {
+    const LOCATIONS_LI = document.querySelectorAll('.list-li')
+
+    for (let i = 0; i < LOCATIONS_LI.length; i++) {
+        const element = LOCATIONS_LI[i]
+        const isCorrectCity = element.textContent.slice(0, -2) === cityName
+        if (isCorrectCity) return
+    }
+
+    if (UI_ELEMENTS.WEATHER_FAVORITES.src === 'favorites-black.svg') {
+        UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites.svg'
+    }
+
+    const CREATE_LI_CITY = document.createElement('li')
+    const BUTTON_CLOSE = document.createElement('span')
+    UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
+    CREATE_LI_CITY.classList.add('mb', 'list-li')
+    CREATE_LI_CITY.textContent = cityName
+    BUTTON_CLOSE.classList.add('li-close')
+    BUTTON_CLOSE.innerHTML = '&#65794'
+    BUTTON_CLOSE.addEventListener('click', deleteCity)
+    CREATE_LI_CITY.append(BUTTON_CLOSE)
+
+    UI_ELEMENTS.LOCATIONS.prepend(CREATE_LI_CITY)
+    CREATE_LI_CITY.addEventListener('click', () => {
+        UI_ELEMENTS.FOREST_INPUT.value = CREATE_LI_CITY.textContent.slice(0, -2)
+        weatherResult()
+    })
+}
 
 function deleteCity() {
     this.parentElement.remove()
-}
-
-function capitalLetter(city) {
-    let firstLetter = city.split().toString()
-    firstLetter = firstLetter[0].toUpperCase() + firstLetter.slice(1)
-    return firstLetter
 }
 
 function timeConverter(data) {
