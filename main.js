@@ -1,21 +1,10 @@
 import {UI_ELEMENTS, URL} from './view.js'
+import {renderStorage, arrayOfSavedCities} from './storage.js'
 
 const arrayCity = []
 let currentCity = undefined
 
-const arrayOfSavedCities = JSON.parse(localStorage.getItem('arrayCity'))
-
-if (localStorage.length > 0) {
-    UI_ELEMENTS.LOCATIONS.innerHTML = null
-
-    arrayOfSavedCities.forEach(item => addLocationsWeather(item))
-
-    UI_ELEMENTS.CITIES.forEach(item => {
-        const cityStorage = item.textContent = localStorage.getItem('cityName')
-        const URL_STORAGE = `${URL.SERVER}?q=${cityStorage}&appid=${URL.APIKEY}`
-        render(URL_STORAGE)
-    })
-}
+renderStorage()
 
 UI_ELEMENTS.CLEAR_STORAGE.addEventListener('click', () => localStorage.clear())
 
@@ -43,7 +32,7 @@ function weatherResult() {
     UI_ELEMENTS.FORM_WEATHER.reset()
 }
 
-function render(URL) {
+export function render(URL) {
     fetch(URL)
         .then(response => response.json())
         .then(renderInfoTabs)
@@ -77,7 +66,7 @@ function addFavourite() {
     localStorage.setItem('cityName', currentCity)
 }
 
-function addLocationsWeather(el) {
+export function addLocationsWeather(el) {
     const CREATE_LI_CITY = document.createElement('li')
     const CITY_FAVOURITE = document.createElement('div')
     const BUTTON_CLOSE = document.createElement('div')
@@ -122,12 +111,8 @@ function deleteCity() {
     this.parentElement.remove()
 
     if (localStorage.length > 0) {
-        let key = this.previousElementSibling.textContent
-        arrayOfSavedCities.forEach(item => {
-            if (item === key) {
-                localStorage.removeItem(key)
-            }
-        })
+        arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(this.parentElement.textContent.slice(0, -2)), 1)
+        localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
     }
 }
 
