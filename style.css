@@ -298,6 +298,24 @@ header {
   height: 340px;
   overflow-y: scroll;
   padding: 35px 40px 10px 40px;
+  position: relative;
+}
+.forest__body-location .location__locations .clear__storage {
+  position: absolute;
+  top: 5px;
+  right: 40px;
+  font-size: 12px;
+  border: 1px solid #000;
+  padding: 2px 5px;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+.forest__body-location .location__locations .clear__storage:hover {
+  color: #fff;
+  background: #000;
+}
+.forest__body-location .location__locations .clear__storage:active {
+  background: #FF0000FF;
 }
 .forest__body-location .location__locations .location__locations-list li:not(:last-child) {
   margin-bottom: 15px;
@@ -305,9 +323,8 @@ header {
 .forest__body-location .location__locations .location__locations-list li {
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
 }
-.forest__body-location .location__locations .location__locations-list li span {
+.forest__body-location .location__locations .location__locations-list li .li-location, .forest__body-location .location__locations .location__locations-list li .li-close {
   cursor: pointer;
 }
 

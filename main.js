@@ -1,6 +1,23 @@
 import {UI_ELEMENTS, URL} from './view.js'
 
+const arrayCity = []
 let currentCity = undefined
+
+const arrayOfSavedCities = JSON.parse(localStorage.getItem('arrayCity'))
+
+if (localStorage.length > 0) {
+    UI_ELEMENTS.LOCATIONS.innerHTML = null
+
+    arrayOfSavedCities.forEach(item => addLocationsWeather(item))
+
+    UI_ELEMENTS.CITIES.forEach(item => {
+        const cityStorage = item.textContent = localStorage.getItem('cityName')
+        const URL_STORAGE = `${URL.SERVER}?q=${cityStorage}&appid=${URL.APIKEY}`
+        render(URL_STORAGE)
+    })
+}
+
+UI_ELEMENTS.CLEAR_STORAGE.addEventListener('click', () => localStorage.clear())
 
 UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     e.preventDefault()
@@ -22,55 +39,99 @@ function weatherResult() {
         return alert('The data is incomplete: ' + error.message)
     }
 
-    fetch(URL_CITY)
-        .then(response => response.json())
-        .then(addInfoTabs)
-        .catch(error => alert(error.message + '\nThe data is incomplete: City is entered incorrectly, check the correctness of the entry.'))
+    render(URL_CITY)
     UI_ELEMENTS.FORM_WEATHER.reset()
 }
 
-function addInfoTabs(answer) {
-    UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(answer.main.temp))
-    UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(answer.main.feels_like))
-    UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = answer.name)
-    answer.weather.forEach(item => {
+function render(URL) {
+    fetch(URL)
+        .then(response => response.json())
+        .then(renderInfoTabs)
+        .catch(error => alert(error.message + '\nThe data is incomplete: City is entered incorrectly, check the correctness of the entry.'))
+}
+
+function renderInfoTabs(data) {
+    UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(data.main.temp))
+    UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(data.main.feels_like))
+    UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = data.name)
+    data.weather.forEach(item => {
         UI_ELEMENTS.CITY_WEATHER.textContent = item.main
         UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + item.icon + '@4x.png'
     })
-    UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(answer.sys.sunrise)
-    UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(answer.sys.sunset)
-    UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', addFavourite)
+    UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(data.sys.sunrise)
+    UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(data.sys.sunset)
 }
 
 function addFavourite() {
-    const LOCATIONS_LI = document.querySelectorAll('.list-li')
-
+    const LOCATIONS_LI = document.querySelectorAll('.li-location')
     for (let i = 0; i < LOCATIONS_LI.length; i++) {
         const element = LOCATIONS_LI[i]
-        const isCorrectCity = element.textContent.slice(0, -2) === currentCity
+        const isCorrectCity = element.textContent === currentCity
         if (isCorrectCity) return
     }
 
+    addLocationsWeather(currentCity)
+
+    arrayCity.push(currentCity)
+    localStorage.setItem('arrayCity', JSON.stringify(arrayCity))
+    localStorage.setItem('cityName', currentCity)
+}
+
+function addLocationsWeather(el) {
     const CREATE_LI_CITY = document.createElement('li')
-    const BUTTON_CLOSE = document.createElement('span')
+    const CITY_FAVOURITE = document.createElement('div')
+    const BUTTON_CLOSE = document.createElement('div')
     UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
     CREATE_LI_CITY.classList.add('mb', 'list-li')
-    CREATE_LI_CITY.textContent = currentCity
+    CITY_FAVOURITE.classList.add('li-location')
+    CITY_FAVOURITE.textContent = el
     BUTTON_CLOSE.classList.add('li-close')
     BUTTON_CLOSE.innerHTML = '&#65794'
     BUTTON_CLOSE.addEventListener('click', deleteCity)
+    CREATE_LI_CITY.append(CITY_FAVOURITE)
     CREATE_LI_CITY.append(BUTTON_CLOSE)
     UI_ELEMENTS.LOCATIONS.prepend(CREATE_LI_CITY)
-
     CREATE_LI_CITY.addEventListener('click', () => {
-        UI_ELEMENTS.FOREST_INPUT.value = CREATE_LI_CITY.textContent.slice(0, -2)
+        UI_ELEMENTS.FOREST_INPUT.value = CITY_FAVOURITE.textContent
         weatherResult()
     })
 }
 
+UI_ELEMENTS.WEATHER_FAVORITES.addEventListener('click', () => {
+    const cityNow = document.querySelector('.weather__city')
+    currentCity = cityNow.textContent
+    addFavourite()
+})
+
+function showInfoCity() {
+    const LOCATIONS_LI = document.querySelectorAll('.li-location')
+    LOCATIONS_LI.forEach(item => item.addEventListener('click', () => {
+        UI_ELEMENTS.FOREST_INPUT.value = item.textContent
+        weatherResult()
+    }))
+}
+
+showInfoCity()
+
+function addDeleteCity() {
+    const closeCity = document.querySelectorAll('.li-close')
+    closeCity.forEach(button => button.addEventListener('click', deleteCity))
+}
+
 function deleteCity() {
     this.parentElement.remove()
+
+    if (localStorage.length > 0) {
+        let key = this.previousElementSibling.textContent
+        arrayOfSavedCities.forEach(item => {
+            if (item === key) {
+                localStorage.removeItem(key)
+            }
+        })
+    }
 }
+
+addDeleteCity()
 
 function timeConverter(data) {
     const TIME_DATA = new Date(data * 1000)
