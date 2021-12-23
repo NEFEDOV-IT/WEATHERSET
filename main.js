@@ -18,7 +18,6 @@ function renderStorage() {
             const URL_STORAGE = `${URL.SERVER}?q=${cityStorage}&appid=${URL.APIKEY}`
             const URL_CITY_FORECAST_STORAGE = `${URL.SERVER_FORECAST}?q=${cityStorage}&appid=${URL.APIKEY}`
             render(URL_STORAGE, URL_CITY_FORECAST_STORAGE)
-            UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
         })
     }
 }
@@ -95,23 +94,20 @@ function renderForecast(data) {
 
 function addFavorite() {
     const LOCATIONS_LI = document.querySelectorAll('.li-location')
-    const cityNow = document.querySelector('.weather__city')
+    const arrayOfSavedCities = JSON.parse(localStorage.getItem('arrayCity'))
+
     for (let i = 0; i < LOCATIONS_LI.length; i++) {
         const element = LOCATIONS_LI[i]
         const isCorrectCity = element.textContent === currentCity
         if (isCorrectCity) {
             UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites.svg'
             LOCATIONS_LI[i].parentElement.remove()
-            const arrayOfSavedCities = JSON.parse(localStorage.getItem('arrayCity'))
             if (arrayOfSavedCities) {
                 arrayOfSavedCities.forEach((item, index) => {
-                    if (item === cityNow.textContent) {
-                        arrayOfSavedCities.splice(index, 1)
-                        localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
-                    }
-                    if (arrayOfSavedCities.length === 0) localStorage.clear()
+                    arrayOfSavedCities.splice(index, 1)
+                    localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
                 })
-            }
+            } localStorage.clear()
             return
         }
     }
