@@ -18,6 +18,7 @@ function renderStorage() {
             const URL_STORAGE = `${URL.SERVER}?q=${cityStorage}&appid=${URL.APIKEY}`
             const URL_CITY_FORECAST_STORAGE = `${URL.SERVER_FORECAST}?q=${cityStorage}&appid=${URL.APIKEY}`
             render(URL_STORAGE, URL_CITY_FORECAST_STORAGE)
+            UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites-black.svg'
         })
     }
 }
