@@ -162,7 +162,7 @@ function deleteCity() {
 
 function dateConverter(data) {
     const DATE_DATA = new Date(data * 1000)
-    let month = DATE_DATA.toLocaleString('en', {month: 'long'})
+    const month = DATE_DATA.toLocaleString('en', {month: 'long'})
     return DATE_DATA.getDate() + ' ' + month
 }
 
