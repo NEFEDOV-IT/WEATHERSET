@@ -9,8 +9,8 @@ export const UI_ELEMENTS = {
     CITY_WEATHER: document.querySelector('.city__weather'),
     CITY_SUNRISE: document.querySelector('.city__sunrise'),
     CITY_SUNSET: document.querySelector('.city__sunset'),
-    WEATHER_IMG: document.querySelector('.city__weather-img'),
-    WEATHER_FAVORITES: document.querySelector('.weather__favorites-img'),
+    WEATHER_IMG: document.querySelector('.city__weather'),
+    WEATHER_FAVORITES: document.querySelector('.weather__favorites'),
     WEATHER_CITY: document.querySelector('.weather__city'),
     FORECAST_BLOCK_INFO: document.querySelectorAll('.cloud-city__item'),
     FORECAST_DAY: document.querySelectorAll('.city-info__date'),
@@ -23,7 +23,7 @@ export const UI_ELEMENTS = {
 
 export const URL = {
     SERVER: 'https://api.openweathermap.org/data/2.5/weather',
-    APIKEY: 'f660a2fb1e4bad108d6160b7f58c555f&units=metric',
+    APIKEY: '9ef705670e05a7f36d295b686608964c\n&units=metric',
     ICON_WEATHER: 'https://openweathermap.org/img/wn/',
     SERVER_FORECAST: 'https://api.openweathermap.org/data/2.5/forecast'
 }

@@ -208,8 +208,8 @@ header {
   cursor: pointer;
   background: url("favorites.svg") no-repeat center;
 }
-.weather__favorites .active {
-  background: url("favorites.svg") no-repeat center;
+.weather__favorites.active {
+  background-image: url("favorites-black.svg");
 }
 
 .mb {

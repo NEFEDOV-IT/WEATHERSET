@@ -181,8 +181,8 @@ header {
   bottom: 20px;
   cursor: pointer;
   background: url("favorites.svg") no-repeat center;
-  & .active {
-    background: url("favorites.svg") no-repeat center;
+  &.active {
+    background-image: url("favorites-black.svg");
   }
 }
 .mb {
