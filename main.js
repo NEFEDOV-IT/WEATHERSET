@@ -94,20 +94,20 @@ function renderForecast(data) {
 
 function addFavorite() {
     const LOCATIONS_LI = document.querySelectorAll('.li-location')
-    const arrayOfSavedCities = JSON.parse(localStorage.getItem('arrayCity'))
+    // const arrayOfSavedCities = JSON.parse(localStorage.getItem('arrayCity'))
 
     for (let i = 0; i < LOCATIONS_LI.length; i++) {
         const element = LOCATIONS_LI[i]
         const isCorrectCity = element.textContent === currentCity
         if (isCorrectCity) {
-            UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites.svg'
-            LOCATIONS_LI[i].parentElement.remove()
-            if (arrayOfSavedCities) {
-                arrayOfSavedCities.forEach((item, index) => {
-                    arrayOfSavedCities.splice(index, 1)
-                    localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
-                })
-            } localStorage.clear()
+            // UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites.svg'
+            // LOCATIONS_LI[i].parentElement.remove()
+            // if (arrayOfSavedCities) {
+            //     arrayOfSavedCities.forEach((item, index) => {
+            //         arrayOfSavedCities.splice(index, 1)
+            //         localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
+            //     })
+            // } localStorage.clear()
             return
         }
     }
