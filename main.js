@@ -47,7 +47,7 @@ function weatherResult() {
     UI_ELEMENTS.FORM_WEATHER.reset()
 }
 
-export function render(URL_CITY, URL_CITY_FORECAST) {
+function render(URL_CITY, URL_CITY_FORECAST) {
     fetch(URL_CITY)
         .then(response => response.json())
         .then(renderInfoTabs)
@@ -94,22 +94,11 @@ function renderForecast(data) {
 
 function addFavorite() {
     const LOCATIONS_LI = document.querySelectorAll('.li-location')
-    // const arrayOfSavedCities = JSON.parse(localStorage.getItem('arrayCity'))
 
     for (let i = 0; i < LOCATIONS_LI.length; i++) {
         const element = LOCATIONS_LI[i]
         const isCorrectCity = element.textContent === currentCity
-        if (isCorrectCity) {
-            // UI_ELEMENTS.WEATHER_FAVORITES.src = 'favorites.svg'
-            // LOCATIONS_LI[i].parentElement.remove()
-            // if (arrayOfSavedCities) {
-            //     arrayOfSavedCities.forEach((item, index) => {
-            //         arrayOfSavedCities.splice(index, 1)
-            //         localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
-            //     })
-            // } localStorage.clear()
-            return
-        }
+        if (isCorrectCity) return
     }
 
     addLocationsWeather(currentCity)
@@ -119,7 +108,7 @@ function addFavorite() {
     localStorage.setItem('cityName', currentCity)
 }
 
-export function addLocationsWeather(currentCity) {
+function addLocationsWeather(currentCity) {
     const CREATE_LI_CITY = document.createElement('li')
     const CITY_FAVORITE = document.createElement('div')
     const BUTTON_CLOSE = document.createElement('div')
