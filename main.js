@@ -84,12 +84,6 @@ function isActiveFavorite(currentCity) {
             }
         })
     }
-
-    Array.from(LOCATIONS_LI).find((item, index) => {
-        if (item.textContent === currentCity && index > 0) {
-            UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
-        }
-    })
 }
 
 function renderForecast(data) {
@@ -125,20 +119,24 @@ UI_ELEMENTS.WEATHER_FAVORITES_IMG.addEventListener('click', () => {
 })
 
 function removeFavorite(currentCity) {
-    // const LOCATIONS_LI = document.querySelectorAll('.li-location')
-    //
-    // for (let i = 0; i < LOCATIONS_LI.length; i++) {
-    //     const element = LOCATIONS_LI[i]
-    //     const isCorrectCity = element.textContent === currentCity
-    //     if (isCorrectCity) {
-    //         LOCATIONS_LI[i].parentElement.remove()
-    //         UI_ELEMENTS.WEATHER_FAVORITES.classList.remove('active')
-    //         if (arrayOfSavedCities) {
-    //             arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(currentCity), 1)
-    //             localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
-    //         }
-    //     }
-    // }
+    const LOCATIONS_LI = document.querySelectorAll('.li-location')
+    if (LOCATIONS_LI.length > 0) {
+        const cityNotText = Array.from(LOCATIONS_LI).find(item => item.textContent)
+        if (cityNotText.textContent === currentCity) {
+            UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
+        }
+
+        Array.from(LOCATIONS_LI).find((item, index) => {
+            if (item.textContent === currentCity && index > 0) {
+                UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
+            }
+            item.parentElement.remove()
+        })
+        if (arrayOfSavedCities) {
+            arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(currentCity), 1)
+            storage.saveFavoriteCities(arrayOfSavedCities)
+        }
+    }
 }
 
 function addFavorite() {
@@ -209,8 +207,8 @@ function deleteCity() {
     if (arrayOfSavedCities) {
         arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(index), 1)
         storage.saveFavoriteCities(arrayOfSavedCities)
-    } localStorage.clear()
-
+    }
+    if (arrayOfSavedCities.length === 0) localStorage.clear()
 }
 
 function dateConverter(data) {
