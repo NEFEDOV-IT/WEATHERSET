@@ -10,7 +10,7 @@ export const UI_ELEMENTS = {
     CITY_SUNRISE: document.querySelector('.city__sunrise'),
     CITY_SUNSET: document.querySelector('.city__sunset'),
     WEATHER_IMG: document.querySelector('.city__weather'),
-    WEATHER_FAVORITES: document.querySelector('.weather__favorites'),
+    WEATHER_FAVORITES_IMG: document.querySelector('.weather__favorites'),
     WEATHER_CITY: document.querySelector('.weather__city'),
     FORECAST_BLOCK_INFO: document.querySelectorAll('.cloud-city__item'),
     FORECAST_DAY: document.querySelectorAll('.city-info__date'),
