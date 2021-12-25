@@ -23,7 +23,6 @@ if (localStorage.length > 0) {
 
 UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     e.preventDefault()
-    // const isFavorite = UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.contains('active')
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
     weatherResult()
 })
@@ -67,6 +66,30 @@ function renderInfoTabs(data) {
     UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + data.weather[0].icon + '@4x.png'
     UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(data.sys.sunrise)
     UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(data.sys.sunset)
+
+    isActiveFavorite(currentCity)
+}
+
+function isActiveFavorite(currentCity) {
+    const LOCATIONS_LI = document.querySelectorAll('.li-location')
+    if (LOCATIONS_LI.length > 0) {
+        const cityNotText = Array.from(LOCATIONS_LI).find(item => item.textContent)
+        if (cityNotText.textContent === currentCity) {
+            UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
+        }
+
+        Array.from(LOCATIONS_LI).find((item, index) => {
+            if (item.textContent === currentCity && index > 0) {
+                UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
+            }
+        })
+    }
+
+    Array.from(LOCATIONS_LI).find((item, index) => {
+        if (item.textContent === currentCity && index > 0) {
+            UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
+        }
+    })
 }
 
 function renderForecast(data) {
@@ -158,6 +181,7 @@ function addLocationsWeather(currentCity) {
     UI_ELEMENTS.LOCATIONS.prepend(CREATE_LI_CITY)
     CREATE_LI_CITY.addEventListener('click', () => {
         UI_ELEMENTS.FOREST_INPUT.value = currentCity
+        UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
         weatherResult()
     })
 }
@@ -181,11 +205,12 @@ function deleteCity() {
     this.parentElement.remove()
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
 
+    const index = this.parentElement.textContent.slice(0, -2)
     if (arrayOfSavedCities) {
-        arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(this.parentElement.textContent.slice(0, -2)), 1)
+        arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(index), 1)
         storage.saveFavoriteCities(arrayOfSavedCities)
-    }
-    if (arrayOfSavedCities.length === 0) localStorage.clear()
+    } localStorage.clear()
+
 }
 
 function dateConverter(data) {
