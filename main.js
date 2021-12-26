@@ -120,34 +120,31 @@ UI_ELEMENTS.WEATHER_FAVORITES_IMG.addEventListener('click', () => {
 
 function removeFavorite(currentCity) {
     const LOCATIONS_LI = document.querySelectorAll('.li-location')
-    if (LOCATIONS_LI.length > 0) {
-        const cityNotText = Array.from(LOCATIONS_LI).find(item => item.textContent)
-        if (cityNotText.textContent === currentCity) {
-            cityNotText.parentElement.remove()
-            UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
-        }
-        Array.from(LOCATIONS_LI).find((item, index) => {
-            if (item.textContent === currentCity && index > 0) {
-                UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
-                item.parentElement.remove()
-            }
-        })
-        if (arrayOfSavedCities) {
-            arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(currentCity), 1)
-            storage.saveFavoriteCities(arrayOfSavedCities)
-        }
-        if (localStorage.length === 0) localStorage.clear()
+    const onlyOneCityAddedLocation = Array.from(LOCATIONS_LI).find(item => item.textContent)
+    const cityAddedLocation = Array.from(LOCATIONS_LI).find((item, index) => {
+        return item.textContent === currentCity && index > 0
+    })
+
+    if (onlyOneCityAddedLocation.textContent === currentCity) {
+        onlyOneCityAddedLocation.parentElement.remove()
+        UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
     }
+
+    if (cityAddedLocation) {
+        UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
+        cityAddedLocation.parentElement.remove()
+    }
+
+    if (arrayOfSavedCities) {
+        arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(currentCity), 1)
+        storage.saveFavoriteCities(arrayOfSavedCities)
+    }
+
+    if (localStorage.length === 0) localStorage.clear()
 }
 
 function addFavorite() {
-    const LOCATIONS_LI = document.querySelectorAll('.li-location')
 
-    for (let i = 0; i < LOCATIONS_LI.length; i++) {
-        const element = LOCATIONS_LI[i]
-        const isCorrectCity = element.textContent === currentCity
-        if (isCorrectCity) return
-    }
 
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
 
@@ -229,17 +226,16 @@ function timeConverter(data) {
 
 const TABS_ITEMS = document.querySelectorAll('.tabs-item')
 const TABS_BLOCKS = document.querySelectorAll('.tabs-block')
-for (let i = 0; i < TABS_ITEMS.length; i++) {
-    const TABS_ITEM = TABS_ITEMS[i]
-    TABS_ITEM.addEventListener('click', () => {
-        for (let i = 0; i < TABS_ITEMS.length; i++) {
-            const TABS_ITEM_ACTIVE = TABS_ITEMS[i]
-            TABS_ITEM_ACTIVE.classList.remove('active')
-            TABS_BLOCKS[i].classList.remove('active')
-        }
-        TABS_ITEM.classList.add('active')
-        TABS_BLOCKS[i].classList.add('active')
+TABS_ITEMS.forEach((activeTab, index) => {
+    activeTab.addEventListener('click', () => {
+        TABS_ITEMS.forEach((removeTabs, ind) => {
+            removeTabs.classList.remove('active')
+            TABS_BLOCKS[ind].classList.remove('active')
+        })
+        activeTab.classList.add('active')
+        TABS_BLOCKS[index].classList.add('active')
     })
-}
+})
+
 
 
