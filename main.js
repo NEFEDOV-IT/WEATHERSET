@@ -123,19 +123,20 @@ function removeFavorite(currentCity) {
     if (LOCATIONS_LI.length > 0) {
         const cityNotText = Array.from(LOCATIONS_LI).find(item => item.textContent)
         if (cityNotText.textContent === currentCity) {
+            cityNotText.parentElement.remove()
             UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
         }
-
         Array.from(LOCATIONS_LI).find((item, index) => {
             if (item.textContent === currentCity && index > 0) {
                 UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
+                item.parentElement.remove()
             }
-            item.parentElement.remove()
         })
         if (arrayOfSavedCities) {
             arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(currentCity), 1)
             storage.saveFavoriteCities(arrayOfSavedCities)
         }
+        if (localStorage.length === 0) localStorage.clear()
     }
 }
 
