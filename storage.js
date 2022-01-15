@@ -8,7 +8,7 @@ export const storage = {
     },
 
     saveFavoriteCities(arrayOfSavedCities) {
-        return localStorage.setItem('arrayCity', JSON.stringify(arrayOfSavedCities))
+        return localStorage.setItem('arrayCity', JSON.stringify([...arrayOfSavedCities]))
     },
 
     getFavoriteCities() {

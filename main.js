@@ -2,7 +2,7 @@ import {UI_ELEMENTS, URL} from './view.js'
 import {storage} from './storage.js'
 
 let currentCity = undefined
-const arrayCity = []
+const arrayCity = new Set()
 const arrayOfSavedCities = storage.getFavoriteCities()
 const cityStorage = storage.getCurrentCity()
 
@@ -46,16 +46,18 @@ function weatherResult() {
     UI_ELEMENTS.FORM_WEATHER.reset()
 }
 
-function render(URL_CITY, URL_CITY_FORECAST) {
-    fetch(URL_CITY)
-        .then(response => response.json())
-        .then(renderInfoTabs)
-        .catch(error => alert(error.message + '\nThe data is incomplete: City is entered incorrectly, check the correctness of the entry.'))
+async function render(URL_CITY, URL_CITY_FORECAST) {
+    try {
+        const responseCity = await fetch(URL_CITY)
+        const jsonCity = await responseCity.json()
+        await renderInfoTabs(jsonCity)
 
-    fetch(URL_CITY_FORECAST)
-        .then(response => response.json())
-        .then(renderForecast)
-        .catch(error => alert(error.message))
+        const responseForecast = await fetch(URL_CITY_FORECAST)
+        const jsonForecast = await responseForecast.json()
+        await renderForecast(jsonForecast)
+    } catch(err) {
+        alert(err)
+    }
 }
 
 function renderInfoTabs(data) {
@@ -125,27 +127,22 @@ function removeFavorite(currentCity) {
         return item.textContent === currentCity && index > 0
     })
 
+    UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
+
     if (onlyOneCityAddedLocation.textContent === currentCity) {
         onlyOneCityAddedLocation.parentElement.remove()
-        UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
     }
 
     if (cityAddedLocation) {
-        UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
         cityAddedLocation.parentElement.remove()
     }
 
-    if (arrayOfSavedCities) {
-        arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(currentCity), 1)
-        storage.saveFavoriteCities(arrayOfSavedCities)
-    }
+    saveSetCities()
 
-    if (localStorage.length === 0) localStorage.clear()
+    if (storage.getFavoriteCities().length === 0) localStorage.clear()
 }
 
 function addFavorite() {
-
-
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
 
     addLocationsWeather(currentCity)
@@ -156,7 +153,7 @@ function addFavorite() {
         arrayOfSavedCities.push(currentCity)
         storage.saveFavoriteCities(arrayOfSavedCities)
     } else {
-        arrayCity.push(currentCity)
+        arrayCity.add(currentCity)
         storage.saveFavoriteCities(arrayCity)
     }
 }
@@ -177,7 +174,6 @@ function addLocationsWeather(currentCity) {
     UI_ELEMENTS.LOCATIONS.prepend(CREATE_LI_CITY)
     CREATE_LI_CITY.addEventListener('click', () => {
         UI_ELEMENTS.FOREST_INPUT.value = currentCity
-        UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
         weatherResult()
     })
 }
@@ -201,12 +197,16 @@ function deleteCity() {
     this.parentElement.remove()
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
 
-    const index = this.parentElement.textContent.slice(0, -2)
-    if (arrayOfSavedCities) {
-        arrayOfSavedCities.splice(arrayOfSavedCities.indexOf(index), 1)
-        storage.saveFavoriteCities(arrayOfSavedCities)
-    }
-    if (arrayOfSavedCities.length === 0) localStorage.clear()
+    saveSetCities()
+
+    if (storage.getFavoriteCities().length === 0) localStorage.clear()
+}
+
+function saveSetCities() {
+    const setArrayCity = new Set(storage.getFavoriteCities())
+    setArrayCity.delete(currentCity)
+    storage.saveFavoriteCities(setArrayCity)
+    storage.saveCurrentCity(Array.from(setArrayCity)[0])
 }
 
 function dateConverter(data) {
