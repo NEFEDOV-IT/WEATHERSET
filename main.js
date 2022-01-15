@@ -71,13 +71,13 @@ async function render(URL_CITY, URL_CITY_FORECAST) {
 }
 // constructor
 function InfoValuesCity(data) {
-    this.temperature = `${Math.round(data.main.temp)}`
-    this.tempFeelsLike =`${Math.round(data.main.feels_like)}`
-    this.cityName = `${data.name}`
-    this.weather = `${data.weather[0].main}`
-    this.icon = `${URL.ICON_WEATHER + data.weather[0].icon + '@4x.png'}`
-    this.sunrise = `${timeConverter(data.sys.sunrise)}`
-    this.sunset = `${timeConverter(data.sys.sunset)}`
+    this.temperature = Math.round(data.main.temp)
+    this.tempFeelsLike = Math.round(data.main.feels_like)
+    this.cityName = data.name
+    this.weather = data.weather[0].main
+    this.icon = URL.ICON_WEATHER + data.weather[0].icon + '@4x.png'
+    this.sunrise = timeConverter(data.sys.sunrise)
+    this.sunset = timeConverter(data.sys.sunset)
 }
 
 function renderInfoTabs() {
