@@ -75,13 +75,9 @@ function renderInfoTabs(data) {
 function isActiveFavorite(currentCity) {
     const LOCATIONS_LI = document.querySelectorAll('.li-location')
     if (LOCATIONS_LI.length > 0) {
-        const cityNotText = Array.from(LOCATIONS_LI).find(item => item.textContent)
-        if (cityNotText.textContent === currentCity) {
-            UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
-        }
-
         Array.from(LOCATIONS_LI).find((item, index) => {
-            if (item.textContent === currentCity && index > 0) {
+            const isActiveCity = item.textContent === currentCity || item.textContent === currentCity && index > 0
+            if (isActiveCity) {
                 UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
             }
         })
