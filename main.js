@@ -5,6 +5,15 @@ let currentCity = undefined
 const arrayCity = new Set()
 const arrayOfSavedCities = storage.getFavoriteCities()
 const cityStorage = storage.getCurrentCity()
+let city_info = {
+    temperature: '',
+    tempFeelsLike: '',
+    cityName: '',
+    weather: '',
+    icon: '',
+    sunrise: '',
+    sunset: '',
+}
 
 weatherResult()
 showInfoCity()
@@ -50,7 +59,8 @@ async function render(URL_CITY, URL_CITY_FORECAST) {
     try {
         const responseCity = await fetch(URL_CITY)
         const jsonCity = await responseCity.json()
-        await renderInfoTabs(jsonCity)
+        city_info = new InfoValuesCity(jsonCity) // constructor
+        await renderInfoTabs()
 
         const responseForecast = await fetch(URL_CITY_FORECAST)
         const jsonForecast = await responseForecast.json()
@@ -59,15 +69,25 @@ async function render(URL_CITY, URL_CITY_FORECAST) {
         alert(err)
     }
 }
+// constructor
+function InfoValuesCity(data) {
+    this.temperature = `${Math.round(data.main.temp)}`
+    this.tempFeelsLike =`${Math.round(data.main.feels_like)}`
+    this.cityName = `${data.name}`
+    this.weather = `${data.weather[0].main}`
+    this.icon = `${URL.ICON_WEATHER + data.weather[0].icon + '@4x.png'}`
+    this.sunrise = `${timeConverter(data.sys.sunrise)}`
+    this.sunset = `${timeConverter(data.sys.sunset)}`
+}
 
-function renderInfoTabs(data) {
-    UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(data.main.temp))
-    UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(data.main.feels_like))
-    UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = data.name)
-    UI_ELEMENTS.CITY_WEATHER.textContent = data.weather[0].main
-    UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + data.weather[0].icon + '@4x.png'
-    UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(data.sys.sunrise)
-    UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(data.sys.sunset)
+function renderInfoTabs() {
+    UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = city_info.temperature)
+    UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = city_info.tempFeelsLike)
+    UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = city_info.cityName)
+    UI_ELEMENTS.CITY_WEATHER.textContent = city_info.weather
+    UI_ELEMENTS.WEATHER_IMG.src = city_info.icon
+    UI_ELEMENTS.CITY_SUNRISE.textContent = city_info.sunrise
+    UI_ELEMENTS.CITY_SUNSET.textContent = city_info.sunset
 
     isActiveFavorite(currentCity)
 }
