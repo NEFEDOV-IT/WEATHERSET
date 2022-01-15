@@ -5,15 +5,6 @@ let currentCity = undefined
 const arrayCity = new Set()
 const arrayOfSavedCities = storage.getFavoriteCities()
 const cityStorage = storage.getCurrentCity()
-let city_info = {
-    temperature: '',
-    tempFeelsLike: '',
-    cityName: '',
-    weather: '',
-    icon: '',
-    sunrise: '',
-    sunset: '',
-}
 
 weatherResult()
 showInfoCity()
@@ -59,8 +50,8 @@ async function render(URL_CITY, URL_CITY_FORECAST) {
     try {
         const responseCity = await fetch(URL_CITY)
         const jsonCity = await responseCity.json()
-        city_info = new InfoValuesCity(jsonCity) // constructor
-        await renderInfoTabs()
+        const city_info = new InfoValuesCity(jsonCity) // constructor
+        await renderInfoTabs(city_info)
 
         const responseForecast = await fetch(URL_CITY_FORECAST)
         const jsonForecast = await responseForecast.json()
@@ -80,7 +71,7 @@ function InfoValuesCity(data) {
     this.sunset = timeConverter(data.sys.sunset)
 }
 
-function renderInfoTabs() {
+function renderInfoTabs(city_info) {
     UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = city_info.temperature)
     UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = city_info.tempFeelsLike)
     UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = city_info.cityName)
