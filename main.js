@@ -4,20 +4,16 @@ import {storage} from './storage.js'
 let currentCity = undefined
 const FIRST_CITY = 'Aktobe'
 const arrayCity = new Set()
-const arrayOfSavedCities = storage.getFavoriteCities()
-const cityStorage = storage.getCurrentCity()
 
 weatherResult()
-showInfoCity()
-addButtonDeleteCity()
 
 if (localStorage.length > 0) {
-    arrayOfSavedCities.forEach(item => addLocationsWeather(item))
+    storage.getFavoriteCities().forEach(item => addLocationsWeather(item))
 
     UI_ELEMENTS.CITIES.forEach(item => {
-        item.textContent = cityStorage
-        const URL_STORAGE = `${URL.SERVER}?q=${cityStorage}&appid=${URL.APIKEY}`
-        const URL_CITY_FORECAST_STORAGE = `${URL.SERVER_FORECAST}?q=${cityStorage}&appid=${URL.APIKEY}`
+        item.textContent = storage.getCurrentCity()
+        const URL_STORAGE = `${URL.SERVER}?q=${storage.getCurrentCity()}&appid=${URL.APIKEY}`
+        const URL_CITY_FORECAST_STORAGE = `${URL.SERVER_FORECAST}?q=${storage.getCurrentCity()}&appid=${URL.APIKEY}`
         render(URL_STORAGE, URL_CITY_FORECAST_STORAGE)
     })
 }
@@ -120,10 +116,9 @@ function renderForecast(data) {
 }
 
 UI_ELEMENTS.WEATHER_FAVORITES_IMG.addEventListener('click', () => {
-    const cityNow = document.querySelector('.weather__city')
-    currentCity = cityNow.textContent
-
+    const currentCity = document.querySelector('.weather__city').textContent
     const favorite_img = document.querySelector('.weather__favorites')
+
     const isFavorite = favorite_img.classList.contains('active')
     isFavorite ? removeFavorite(currentCity) : addFavorite()
 })
@@ -131,13 +126,11 @@ UI_ELEMENTS.WEATHER_FAVORITES_IMG.addEventListener('click', () => {
 function removeFavorite(currentCity) {
     const LOCATIONS_LI = document.querySelectorAll('.li-location')
     const deleteCity = document.querySelector('.weather__city').textContent
-    const onlyOneCityAddedLocation = Array.from(LOCATIONS_LI).find(item => item.textContent)
+    const findCityInAddedLocation = Array.from(LOCATIONS_LI).find(item => item.textContent === currentCity)
 
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
 
-    if (onlyOneCityAddedLocation.textContent === currentCity) {
-        onlyOneCityAddedLocation.parentElement.remove()
-    }
+    findCityInAddedLocation.parentElement.remove()
 
     deleteSaveCities(deleteCity)
 
@@ -151,9 +144,10 @@ function addFavorite() {
 
     storage.saveCurrentCity(currentCity)
 
-    if (arrayOfSavedCities) {
-        arrayOfSavedCities.push(currentCity)
-        storage.saveFavoriteCities(arrayOfSavedCities)
+    if (storage.getFavoriteCities()) {
+        const array = new Set(storage.getFavoriteCities())
+        array.add(currentCity)
+        storage.saveFavoriteCities(array)
     } else {
         arrayCity.add(currentCity)
         storage.saveFavoriteCities(arrayCity)
@@ -178,21 +172,6 @@ function addLocationsWeather(currentCity) {
         UI_ELEMENTS.FOREST_INPUT.value = currentCity
         weatherResult()
     })
-}
-
-function showInfoCity() {
-    const LOCATIONS_LI = document.querySelectorAll('.li-location')
-    LOCATIONS_LI.forEach(item => item.addEventListener('click', () => {
-        UI_ELEMENTS.FOREST_INPUT.value = item.textContent
-        UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.add('active')
-        storage.saveCurrentCity(item.textContent)
-        weatherResult()
-    }))
-}
-
-function addButtonDeleteCity() {
-    const closeCity = document.querySelectorAll('.li-close')
-    closeCity.forEach(button => button.addEventListener('click', deleteCity))
 }
 
 function deleteCity() {
