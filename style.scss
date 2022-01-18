@@ -47,14 +47,19 @@ html, body {
 header {
   text-align: center;
   padding: 10px;
-  margin-bottom: 30px;
   text-transform: uppercase;
-  background-color: darkslateblue;
+  background-color: #0c0150d9;
   color: #fff;
   font-weight: bold;
 }
 .main {
+  background: url("back.jpg") no-repeat center/cover;
   flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  @media screen and (max-width: 620px) {
+    padding-top: 20px;
+  }
 }
 .container {
   max-width: 800px;
@@ -62,18 +67,25 @@ header {
   padding: 0 10px;
 }
 .forest__form {
+  background: rgba(0,0,0,0.08);
   border: 1px solid #000;
+  border-radius: 10px 10px 0 0;
   width: 100%;
   height: 45px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   & .forest__input {
+    background: rgba(0,0,0,0);
     width: 90%;
     height: 35px;
     font-size: 18px;
     line-height: 21px;
     padding: 0 5px;
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 2px 0 3px #000;
+    }
     @media screen and (max-width: 620px) {
       width: 80%;
       &::placeholder {
@@ -126,12 +138,18 @@ header {
 .tabs-block__item {
   flex: 0 0 98.5px;
   border: 1px solid #000;
-  background-color: #fff;
+  background: rgba(0,0,0,0.08);
   padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  &:first-child {
+    border-radius: 0 0 0 10px;
+    @media screen and (max-width: 620px) {
+      border-radius: 0;
+    }
+  }
 
   & + .tabs-block__item {
     border-left: 0;
@@ -143,6 +161,7 @@ header {
   }
 }
 .tabs-block__body {
+  background: rgba(0,0,0,0.08);
   position: relative;
   height: 345px;
   border-left: 1px solid #000;
@@ -171,6 +190,7 @@ header {
   position: absolute;
   left: 10px;
   bottom: 20px;
+  text-shadow: 1px 1px 2px #fff;
 }
 .weather__favorites {
   display: block;
@@ -195,6 +215,7 @@ header {
   padding: 25px 10px 0 15px;
   & .city {
     margin-bottom: 25px;
+    text-shadow: 1px 1px 2px #fff;
   }
   & .city__info {
     height: 250px;
@@ -211,6 +232,7 @@ header {
   padding: 25px 0 0 15px;
   & .cloud-city {
     margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #fff;
   }
   & .cloud-city-info{
     height: 282px;
@@ -256,12 +278,15 @@ header {
   }
 }
 .forest__body-location {
+  background: rgba(0,0,0,0.08);
   font-size: 24px;
   line-height: 28px;
   border-right: 1px solid #000;
+  border-radius: 0 0 10px 0;
   border-bottom: 1px solid #000;
   @media screen and (max-width: 620px) {
     border-left: 1px solid #000;
+    border-radius: 0 0 10px 10px;
   }
   .location__add{
     padding: 25px 15px 10px 15px;
@@ -290,8 +315,13 @@ header {
 footer {
   text-align: center;
   padding: 10px;
-  text-transform: uppercase;
-  background-color: darkslateblue;
-  color: #fff;
-  font-weight: bold;
+  background-color: #0c0150d9;
+  & a {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+    &:visited {
+      color: #fff;
+    }
+  }
 }

@@ -2,6 +2,7 @@ import {UI_ELEMENTS, URL} from './view.js'
 import {storage} from './storage.js'
 
 let currentCity = undefined
+const FIRST_CITY = 'Aktobe'
 const arrayCity = new Set()
 const arrayOfSavedCities = storage.getFavoriteCities()
 const cityStorage = storage.getCurrentCity()
@@ -50,7 +51,7 @@ async function render(URL_CITY, URL_CITY_FORECAST) {
     try {
         const responseCity = await fetch(URL_CITY)
         const jsonCity = await responseCity.json()
-        const city_info = new InfoValuesCity(jsonCity) // constructor
+        const city_info = new InfoValuesCity(jsonCity)
         await renderInfoTabs(city_info)
 
         const responseForecast = await fetch(URL_CITY_FORECAST)
@@ -60,7 +61,7 @@ async function render(URL_CITY, URL_CITY_FORECAST) {
         alert(err)
     }
 }
-// constructor
+
 function InfoValuesCity(data) {
     this.temperature = Math.round(data.main.temp)
     this.tempFeelsLike = Math.round(data.main.feels_like)
@@ -129,10 +130,8 @@ UI_ELEMENTS.WEATHER_FAVORITES_IMG.addEventListener('click', () => {
 
 function removeFavorite(currentCity) {
     const LOCATIONS_LI = document.querySelectorAll('.li-location')
+    const deleteCity = document.querySelector('.weather__city').textContent
     const onlyOneCityAddedLocation = Array.from(LOCATIONS_LI).find(item => item.textContent)
-    const cityAddedLocation = Array.from(LOCATIONS_LI).find((item, index) => {
-        return item.textContent === currentCity && index > 0
-    })
 
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
 
@@ -140,11 +139,7 @@ function removeFavorite(currentCity) {
         onlyOneCityAddedLocation.parentElement.remove()
     }
 
-    if (cityAddedLocation) {
-        cityAddedLocation.parentElement.remove()
-    }
-
-    saveSetCities()
+    deleteSaveCities(deleteCity)
 
     if (storage.getFavoriteCities().length === 0) localStorage.clear()
 }
@@ -204,16 +199,17 @@ function deleteCity() {
     this.parentElement.remove()
     UI_ELEMENTS.WEATHER_FAVORITES_IMG.classList.remove('active')
 
-    saveSetCities()
+    const deleteCity = this.parentElement.textContent.slice(0, -2)
+    deleteSaveCities(deleteCity)
 
     if (storage.getFavoriteCities().length === 0) localStorage.clear()
 }
 
-function saveSetCities() {
-    const setArrayCity = new Set(storage.getFavoriteCities())
-    setArrayCity.delete(currentCity)
-    storage.saveFavoriteCities(setArrayCity)
-    storage.saveCurrentCity(Array.from(setArrayCity)[0])
+function deleteSaveCities(deleteCity) {
+    const cities = new Set(storage.getFavoriteCities())
+    cities.delete(deleteCity)
+    storage.saveFavoriteCities(cities)
+    storage.saveCurrentCity(Array.from(cities)[0] || FIRST_CITY)
 }
 
 function dateConverter(data) {
