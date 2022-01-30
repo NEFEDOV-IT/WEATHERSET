@@ -1,5 +1,5 @@
-import {UI_ELEMENTS, URL} from './view.js'
-import {storage} from './storage.js'
+import { UI_ELEMENTS, URL } from './view.js'
+import { storage } from './storage.js'
 
 let currentCity = undefined
 const FIRST_CITY = 'Aktobe'
@@ -43,39 +43,26 @@ function weatherResult() {
     UI_ELEMENTS.FORM_WEATHER.reset()
 }
 
-async function render(URL_CITY, URL_CITY_FORECAST) {
-    try {
-        const responseCity = await fetch(URL_CITY)
-        const jsonCity = await responseCity.json()
-        const city_info = new InfoValuesCity(jsonCity)
-        await renderInfoTabs(city_info)
+function render(URL_CITY, URL_CITY_FORECAST) {
+    fetch(URL_CITY)
+        .then(response => response.json())
+        .then(renderInfoTabs)
+        .catch(error => alert(error.message + '\nThe data is incomplete: City is entered incorrectly, check the correctness of the entry.'))
 
-        const responseForecast = await fetch(URL_CITY_FORECAST)
-        const jsonForecast = await responseForecast.json()
-        await renderForecast(jsonForecast)
-    } catch(err) {
-        alert(err)
-    }
+    fetch(URL_CITY_FORECAST)
+        .then(response => response.json())
+        .then(renderForecast)
+        .catch(error => alert(error.message))
 }
 
-function InfoValuesCity(data) {
-    this.temperature = Math.round(data.main.temp)
-    this.tempFeelsLike = Math.round(data.main.feels_like)
-    this.cityName = data.name
-    this.weather = data.weather[0].main
-    this.icon = URL.ICON_WEATHER + data.weather[0].icon + '@4x.png'
-    this.sunrise = timeConverter(data.sys.sunrise)
-    this.sunset = timeConverter(data.sys.sunset)
-}
-
-function renderInfoTabs(city_info) {
-    UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = city_info.temperature)
-    UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = city_info.tempFeelsLike)
-    UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = city_info.cityName)
-    UI_ELEMENTS.CITY_WEATHER.textContent = city_info.weather
-    UI_ELEMENTS.WEATHER_IMG.src = city_info.icon
-    UI_ELEMENTS.CITY_SUNRISE.textContent = city_info.sunrise
-    UI_ELEMENTS.CITY_SUNSET.textContent = city_info.sunset
+function renderInfoTabs(data) {
+    UI_ELEMENTS.TEMPERATURE.forEach(item => item.textContent = Math.round(data.main.temp))
+    UI_ELEMENTS.FEELS_LIKE.forEach(item => item.textContent = Math.round(data.main.feels_like))
+    UI_ELEMENTS.CITIES.forEach(item => item.textContent = currentCity = data.name)
+    UI_ELEMENTS.CITY_WEATHER.textContent = data.weather[0].main
+    UI_ELEMENTS.WEATHER_IMG.src = URL.ICON_WEATHER + data.weather[0].icon + '@4x.png'
+    UI_ELEMENTS.CITY_SUNRISE.textContent = timeConverter(data.sys.sunrise)
+    UI_ELEMENTS.CITY_SUNSET.textContent = timeConverter(data.sys.sunset)
 
     isActiveFavorite(currentCity)
 }
@@ -91,28 +78,32 @@ function isActiveFavorite(currentCity) {
         })
     }
 }
-
 function renderForecast(data) {
-    UI_ELEMENTS.FORECAST_BLOCK_INFO.forEach(() => {
-        UI_ELEMENTS.FORECAST_DAY.forEach((item, index) => {
-            item.textContent = dateConverter(data.list[index].dt)
-        })
-        UI_ELEMENTS.FORECAST_TIME.forEach((item, index) => {
-            item.textContent = timeConverter(data.list[index].dt)
-        })
-        UI_ELEMENTS.FORECAST_TEMP.forEach((item, index) => {
-            item.textContent = Math.round(data.list[index].main.temp)
-        })
-        UI_ELEMENTS.FORECAST_FEELS_LIKE.forEach((item, index) => {
-            item.textContent = Math.round(data.list[index].main.feels_like)
-        })
-        UI_ELEMENTS.FORECAST_CLOUD_IMG.forEach((item, index) => {
-            item.src = URL.ICON_WEATHER + data.list[index].weather[0].icon + '.png'
-        })
-        UI_ELEMENTS.FORECAST_CLOUD_NAME.forEach((item, index) => {
-            item.textContent = data.list[index].weather[0].main
-        })
-    })
+    UI_ELEMENTS.CLOUD_CITY_INFO.innerHTML = ''
+
+    for (let i = 0; i < data.list.length - 1; i++) {
+        const infoWeatherCity =
+            `<div class="cloud-city__item">
+             <div class="city-info__date">${dateConverter(data.list[i].dt)}</div>
+             <div class ="city-info__time">${timeConverter(data.list[i].dt)}</div>
+             <div class ="city-info__body">
+               <div class="city-info__temperature">
+                Temperature: <span>${Math.round(data.list[i].main.temp)}</span>°
+               </div>
+               <div class="city-info-feels">
+                Feels like: <span>${Math.round(data.list[i].main.feels_like)}</span>°
+               </div>
+             </div>
+             <div class="city-info__cloud">
+               <div class="city-info__cloud-name">
+                ${data.list[i].weather[0].main}
+               </div>
+             <div class="city-info__cloud-img">
+                <img src="${URL.ICON_WEATHER + data.list[i].weather[0].icon + '.png'}" alt="">
+             </div>
+         </div>`
+        UI_ELEMENTS.CLOUD_CITY_INFO.insertAdjacentHTML('beforeend', infoWeatherCity)
+    }
 }
 
 UI_ELEMENTS.WEATHER_FAVORITES_IMG.addEventListener('click', () => {

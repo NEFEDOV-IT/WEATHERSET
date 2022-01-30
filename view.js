@@ -9,16 +9,10 @@ export const UI_ELEMENTS = {
     CITY_WEATHER: document.querySelector('.city__weather'),
     CITY_SUNRISE: document.querySelector('.city__sunrise'),
     CITY_SUNSET: document.querySelector('.city__sunset'),
+    CLOUD_CITY_INFO: document.querySelector('.cloud-city-info'),
     WEATHER_IMG: document.querySelector('.city__weather'),
     WEATHER_FAVORITES_IMG: document.querySelector('.weather__favorites'),
     WEATHER_CITY: document.querySelector('.weather__city'),
-    FORECAST_BLOCK_INFO: document.querySelectorAll('.cloud-city__item'),
-    FORECAST_DAY: document.querySelectorAll('.city-info__date'),
-    FORECAST_TIME: document.querySelectorAll('.city-info__time'),
-    FORECAST_TEMP: document.querySelectorAll('.city-info__temperature span'),
-    FORECAST_FEELS_LIKE: document.querySelectorAll('.city-info-feels span'),
-    FORECAST_CLOUD_NAME: document.querySelectorAll('.city-info__cloud-name'),
-    FORECAST_CLOUD_IMG: document.querySelectorAll('.city-info__cloud-img img'),
 }
 
 export const URL = {
