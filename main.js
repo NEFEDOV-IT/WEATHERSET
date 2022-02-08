@@ -24,6 +24,26 @@ UI_ELEMENTS.BUTTON_SEARCH_CITY.addEventListener('click', (e) => {
     weatherResult()
 })
 
+class Error {
+    constructor(message) {
+        this.message = message;
+        this.name = 'Error';
+    }
+}
+
+class NamingError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
+
+class ValidationError extends NamingError {
+    constructor(message) {
+        super(message);
+    }
+}
+
 function weatherResult() {
     const city = UI_ELEMENTS.FOREST_INPUT.value || UI_ELEMENTS.WEATHER_CITY.textContent.trim()
     const URL_CITY = `${URL.SERVER}?q=${city}&appid=${URL.APIKEY}`
@@ -32,11 +52,13 @@ function weatherResult() {
 
     try {
         UI_ELEMENTS.FOREST_INPUT.classList.remove('error')
-        if (!isEmptyCity) throw new SyntaxError("City is not entered or entered incorrectly, check the correctness of the entry.")
+        if (!isEmptyCity) throw new ValidationError("The data is incomplete: City is not entered or entered incorrectly, check the correctness of the entry.")
     } catch (error) {
-        UI_ELEMENTS.FORM_WEATHER.reset()
-        UI_ELEMENTS.FOREST_INPUT.classList.add('error')
-        return alert('The data is incomplete: ' + error.message)
+        if (error instanceof ValidationError) {
+            UI_ELEMENTS.FORM_WEATHER.reset()
+            UI_ELEMENTS.FOREST_INPUT.classList.add('error')
+            return alert(error.message)
+        } throw error.message
     }
 
     render(URL_CITY, URL_CITY_FORECAST)
@@ -47,7 +69,6 @@ function render(URL_CITY, URL_CITY_FORECAST) {
     fetch(URL_CITY)
         .then(response => response.json())
         .then(renderInfoTabs)
-        .catch(error => alert(error.message + '\nThe data is incomplete: City is entered incorrectly, check the correctness of the entry.'))
 
     fetch(URL_CITY_FORECAST)
         .then(response => response.json())
