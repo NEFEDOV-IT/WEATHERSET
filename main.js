@@ -7,7 +7,7 @@ const arrayCity = new Set()
 
 weatherResult()
 
-if (localStorage.length > 0) {
+if (storage.getCurrentCity()) {
     storage.getFavoriteCities().forEach(item => addLocationsWeather(item))
 
     UI_ELEMENTS.CITIES.forEach(item => {
